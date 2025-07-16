@@ -57,7 +57,7 @@ if ingredients_list:
               sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
           else:
               st.error(f"Fehler beim Abrufen der Daten für {fruit_chosen} (Status Code: {smoothiefroot_response.status_code})")
-        else:
+      else:
           st.warning(f"Kein gültiger 'SEARCH_ON'-Wert für {fruit_chosen} gefunden. Diese Frucht wird übersprungen.")
 
               # st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
