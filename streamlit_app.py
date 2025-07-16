@@ -43,7 +43,20 @@ if ingredients_list:
     for fruit_chosen in ingredients_list:
             ingredients_string += fruit_chosen + ' '
            
-            search_on=pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON'].iloc[0]
+          search_on_series = pd_df.loc[pd_df['FRUIT_NAME'] == fruit_chosen, 'SEARCH_ON']
+
+          if not search_on_series.empty and pd.notna(search_on_series.iloc[0]):
+              search_on = search_on_series.iloc[0]
+              
+              # API-Anfrage mit search_on
+              smoothiefroot_response = requests.get("https://fruityvice.com/api/fruit/" + search_on)
+              
+              if smoothiefroot_response.status_code == 200:
+                  sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+              else:
+                  st.error(f"Fehler beim Abrufen der Daten für {fruit_chosen} (Status Code: {smoothiefroot_response.status_code})")
+          else:
+              st.warning(f"Kein gültiger 'SEARCH_ON'-Wert für {fruit_chosen} gefunden.")
             # st.write('The search value for ', fruit_chosen,' is ', search_on, '.')
 
       
